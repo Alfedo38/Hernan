@@ -1,44 +1,38 @@
-package com.example.hernan
+package com.example.hernan.ui.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hernan.databinding.ItemMenuBinding
+import com.example.hernan.R
 import com.example.hernan.data.model.Menu
-import java.text.SimpleDateFormat
-import java.util.*
 
-class WeeklyMenuAdapter(private var menus: List<Menu>) :
-    RecyclerView.Adapter<WeeklyMenuAdapter.MenuViewHolder>() {
+class WeeklyMenuAdapter : RecyclerView.Adapter<WeeklyMenuAdapter.ViewHolder>() {
+    var menus: List<Menu> = emptyList()
 
-    class MenuViewHolder(private val binding: ItemMenuBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(menu: Menu) {
-            val dateFormat = SimpleDateFormat("EEEE, d MMMM", Locale.getDefault())
-            binding.tvMenuDate.text = dateFormat.format(menu.date)
-            binding.tvMainDish.text = menu.mainDish
-            binding.tvSideDish.text = menu.sideDish
-            binding.tvDessert.text = menu.dessert
-            binding.tvCalories.text = "${menu.calories} kcal"
-            binding.tvIngredients.text = menu.ingredients.joinToString(", ")
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_menu, parent, false)
+        return ViewHolder(view)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
-        val binding = ItemMenuBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-        return MenuViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
-        holder.bind(menus[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val menu = menus[position]
+        holder.date.text = menu.date
+        holder.mainDish.text = menu.mainDish
+        holder.sideDish.text = menu.sideDish
+        holder.dessert.text = menu.dessert
+        holder.calories.text = menu.calories.toString()
     }
 
     override fun getItemCount(): Int = menus.size
 
-    fun updateMenus(newMenus: List<Menu>) {
-        menus = newMenus
-        notifyDataSetChanged()
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val date: TextView = view.findViewById(R.id.dateTextView)
+        val mainDish: TextView = view.findViewById(R.id.mainDishTextView)
+        val sideDish: TextView = view.findViewById(R.id.sideDishTextView)
+        val dessert: TextView = view.findViewById(R.id.dessertTextView)
+        val calories: TextView = view.findViewById(R.id.caloriesTextView)
     }
 }

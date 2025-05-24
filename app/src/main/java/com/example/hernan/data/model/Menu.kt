@@ -1,9 +1,15 @@
 package com.example.hernan.data.model
 
-import com.google.firebase.firestore.PropertyName
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Menu(
-    @PropertyName("id") val id: String = "",
-    @PropertyName("name") val name: String = "",
-    @PropertyName("description") val description: String = ""
-)
+    val id: String = "",
+    val date: String = "",
+    val mainDish: String = "",
+    val sideDish: String = "",
+    val dessert: String = "",
+    val calories: Int = 0,
+    val ingredients: List<String> = emptyList()
+) : Parcelable

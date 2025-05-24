@@ -1,18 +1,21 @@
 package com.example.hernan.data.repository
 
-class AuthRepository {
-    private val firebaseAuth = Firebase.auth
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseUser
 
-    suspend fun loginWithEmail(email: String, password: String): FirebaseUser {
+class AuthRepository {
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    suspend fun login(email: String, password: String): FirebaseUser? {
         return try {
-            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            result.user ?: throw Exception("Usuario no encontrado")
-        } catch (e: Exception) {
-            throw when (e) {
-                is FirebaseAuthInvalidUserException -> Exception("Usuario no registrado")
-                is FirebaseAuthInvalidCredentialsException -> Exception("Credenciales incorrectas")
-                else -> Exception("Error al iniciar sesión: ${e.message}")
-            }
+            val result = auth.signInWithEmailAndPassword(email, password).await()
+            result.user
+        } catch (e: FirebaseAuthInvalidUserException) {
+            null
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            null
         }
     }
 }
