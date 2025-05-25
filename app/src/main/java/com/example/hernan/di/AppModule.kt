@@ -1,9 +1,9 @@
 package com.example.hernan.di
 
+import com.example.hernan.data.repository.AuthRepository
+import com.example.hernan.data.repository.MenuRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,17 +22,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFirestore(): FirebaseFirestore {
-        return Firebase.firestore.apply {
-            firestoreSettings = firestoreSettings {
-                isPersistenceEnabled = true
-            }
-        }
+    fun provideFirebaseFirestore(): FirebaseFirestore {
+        val firestore = FirebaseFirestore.getInstance()
+        return firestore
     }
 
     @Provides
     @Singleton
-    fun provideMenuRepository(db: FirebaseFirestore): MenuRepository {
-        return MenuRepository(db)
+    fun provideAuthRepository(auth: FirebaseAuth): AuthRepository {
+        return AuthRepository(auth)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMenuRepository(firestore: FirebaseFirestore): MenuRepository {
+        return MenuRepository(firestore)
     }
 }
